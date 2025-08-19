@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSS-KAR Konfigurator</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .config-section { 
+            background: white;
+            margin: 20px 0; 
+            padding: 20px; 
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .config-section h3 {
+            color: #333;
+            margin-top: 0;
+        }
+        select { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 8px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        .extras-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .extra-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+        .extra-item input {
+            margin-right: 10px;
+        }
+        .price-display { 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        .price-display h2 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .breakdown {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .breakdown-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .actions {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+        .btn:hover {
+            background: #5a6fd8;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚗 OSS-KAR Konfigurator</h1>
+        <p>Stelle dein Traumauto zusammen - Real-time Preiskalkulation</p>
+    </div>
+    
+    <div class="loading" id="loading">
+        <p>⚡ Lade Optionen...</p>
+    </div>
+    
+    <div class="config-section">
+        <h3>🏎️ Motor</h3>
+        <select id="engine-select">
+            <option value="">Motor wählen...</option>
+        </select>
+        <small id="engine-description"></small>
+    </div>
+    
+    <div class="config-section">
+        <h3>🎨 Lackierung</h3>
+        <select id="paint-select">
+            <option value="">Lackierung wählen...</option>
+        </select>
+        <small id="paint-description"></small>
+    </div>
+    
+    <div class="config-section">
+        <h3>⚡ Felgen</h3>
+        <select id="wheels-select">
+            <option value="">Felgen wählen...</option>
+        </select>
+        <small id="wheels-description"></small>
+    </div>
+    
+    <div class="config-section">
+        <h3>✨ Extras (max. 5)</h3>
+        <div class="extras-grid" id="extras-container">
+            <!-- Extras werden hier dynamisch geladen -->
+        </div>
+        <small>Du kannst maximal 5 Extras auswählen</small>
+    </div>
+    
+    <div class="price-display">
+        <h2 id="total-price">25.000 €</h2>
+        <p>Gesamtpreis inkl. aller Optionen</p>
+    </div>
+    
+    <div class="breakdown" id="price-breakdown" style="display: none;">
+        <!-- Price breakdown wird hier angezeigt -->
+    </div>
+    
+    <div class="actions">
+        <button class="btn" id="save-config">💾 Konfiguration Speichern</button>
+        <button class="btn" id="order-now">🛒 Jetzt Bestellen</button>
+    </div>
+
+    <script>
+        console.log('🚀 OSS-KAR Frontend loaded!');
+        
+        // Global variables
+        let carOptions = {};
+        let currentConfig = {
+            engineId: null,
+            paintId: null,
+            wheelsId: null,
+            extrasIds: []
+        };
+        
+        // jQuery Ready
+        $(document).ready(function() {
+            loadCarOptions();
+            setupEventHandlers();
+        });
+        
+        // Load all car options from API
+        function loadCarOptions() {
+            $('#loading').show();
+            
+            $.get('/osskar/api/options')
+                .done(function(data) {
+                    carOptions = data;
+                    populateSelects();
+                    $('#loading').hide();
+                    console.log('✅ Car options loaded:', data);
+                })
+                .fail(function() {
+                    alert('❌ Fehler beim Laden der Optionen');
+                    $('#loading').hide();
+                });
+        }
+        
+        // Populate select dropdowns
+        function populateSelects() {
+            // Engines
+            carOptions.engine.forEach(function(engine) {
+                $('#engine-select').append(
+                    `<option value="${engine.id}">${engine.name} (+${engine.price}€)</option>`
+                );
+            });
+            
+            // Paint
+            carOptions.paint.forEach(function(paint) {
+                $('#paint-select').append(
+                    `<option value="${paint.id}">${paint.name} (+${paint.price}€)</option>`
+                );
+            });
+            
+            // Wheels
+            carOptions.wheels.forEach(function(wheels) {
+                $('#wheels-select').append(
+                    `<option value="${wheels.id}">${wheels.name} (+${wheels.price}€)</option>`
+                );
+            });
+            
+            // Extras
+            carOptions.extras.forEach(function(extra) {
+                $('#extras-container').append(`
+                    <div class="extra-item">
+                        <input type="checkbox" id="extra-${extra.id}" value="${extra.id}">
+                        <label for="extra-${extra.id}">
+                            <strong>${extra.name}</strong> (+${extra.price}€)<br>
+                            <small>${extra.description}</small>
+                        </label>
+                    </div>
+                `);
+            });
+        }
+        
+        // Setup event handlers
+        function setupEventHandlers() {
+            // Engine change
+            $('#engine-select').change(function() {
+                currentConfig.engineId = $(this).val() || null;
+                updateDescription('engine');
+                calculatePrice();
+            });
+            
+            // Paint change
+            $('#paint-select').change(function() {
+                currentConfig.paintId = $(this).val() || null;
+                updateDescription('paint');
+                calculatePrice();
+            });
+            
+            // Wheels change
+            $('#wheels-select').change(function() {
+                currentConfig.wheelsId = $(this).val() || null;
+                updateDescription('wheels');
+                calculatePrice();
+            });
+            
+            // Extras change
+            $(document).on('change', 'input[type="checkbox"]', function() {
+                const selectedExtras = $('input[type="checkbox"]:checked').map(function() {
+                    return parseInt($(this).val());
+                }).get();
+                
+                // Max 5 extras limit
+                if (selectedExtras.length > 5) {
+                    $(this).prop('checked', false);
+                    alert('❌ Maximal 5 Extras erlaubt!');
+                    return;
+                }
+                
+                currentConfig.extrasIds = selectedExtras;
+                calculatePrice();
+            });
+        }
+        
+        // Update description text
+        function updateDescription(category) {
+            const selectId = `#${category}-select`;
+            const descId = `#${category}-description`;
+            const selectedId = $(selectId).val();
+            
+            if (selectedId && carOptions[category]) {
+                const option = carOptions[category].find(item => item.id == selectedId);
+                if (option) {
+                    $(descId).text(option.description);
+                }
+            } else {
+                $(descId).text('');
+            }
+        }
+        
+        // Calculate total price
+        function calculatePrice() {
+            // Only calculate if at least one option is selected
+            const hasSelection = currentConfig.engineId || currentConfig.paintId || 
+                                currentConfig.wheelsId || currentConfig.extrasIds.length > 0;
+            
+            if (!hasSelection) {
+                $('#total-price').text('25.000 €');
+                $('#price-breakdown').hide();
+                return;
+            }
+            
+            $.ajax({
+                url: '/osskar/api/calculate',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(currentConfig),
+                success: function(data) {
+                    $('#total-price').text(formatPrice(data.totalPrice));
+                    updatePriceBreakdown(data.breakdown);
+                    console.log('💰 Price calculated:', data);
+                },
+                error: function() {
+                    console.error('❌ Price calculation failed');
+                }
+            });
+        }
+        
+        // Update price breakdown display
+        function updatePriceBreakdown(breakdown) {
+            let html = '<h4>Preisaufschlüsselung:</h4>';
+            
+            html += `<div class="breakdown-item">
+                <span>Basispreis:</span>
+                <span>${formatPrice(breakdown.basePrice)}</span>
+            </div>`;
+            
+            if (breakdown.engine) {
+                html += `<div class="breakdown-item">
+                    <span>Motor:</span>
+                    <span>+${formatPrice(breakdown.engine)}</span>
+                </div>`;
+            }
+            
+            if (breakdown.paint) {
+                html += `<div class="breakdown-item">
+                    <span>Lackierung:</span>
+                    <span>+${formatPrice(breakdown.paint)}</span>
+                </div>`;
+            }
+            
+            if (breakdown.wheels) {
+                html += `<div class="breakdown-item">
+                    <span>Felgen:</span>
+                    <span>+${formatPrice(breakdown.wheels)}</span>
+                </div>`;
+            }
+            
+            if (breakdown.extras) {
+                html += `<div class="breakdown-item">
+                    <span>Extras:</span>
+                    <span>+${formatPrice(breakdown.extras)}</span>
+                </div>`;
+            }
+            
+            $('#price-breakdown').html(html).show();
+        }
+        
+        // Format price with € symbol
+        function formatPrice(price) {
+            return new Intl.NumberFormat('de-DE', {
+                style: 'currency',
+                currency: 'EUR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(price);
+        }
+    </script>
+</body>
+</html>
