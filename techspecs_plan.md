@@ -9,8 +9,7 @@
 - **Frontend:** Pure HTML/CSS + jQuery
 - **Backend:** Node.js + Express
 - **Database:** SQLite
-- **Server:** Ubuntu + Nginx (Reverse Proxy)
-- **Deployment:** Manual SSH Terminal (iPad Pro + Magic Keyboard)
+- **Server:** Ubuntu + Nginx 
 
 -----
 
@@ -148,15 +147,15 @@ CREATE TABLE orders (
 
 ### **Level 1: Foundation** 🏗️
 
-- [ ] **1.1** SQLite Database Setup (Schema + Test Data)
-- [ ] **1.2** Express Server Grundsetup (package.json, dependencies)
-- [ ] **1.3** Basic API Routes (GET /api/options, POST /api/calculate)
-- [ ] **1.4** Nginx Proxy Config (Frontend → Backend routing)
+- [x] **1.1** SQLite Database Setup (Schema + Test Data)
+- [x] **1.2** Express Server Grundsetup (package.json, dependencies)
+- [x] **1.3** Basic API Routes (GET /api/options, POST /api/calculate)
+- [x] **1.4** Nginx Proxy Config (Frontend → Backend routing)
 
 ### **Level 2: Core Logic** ⚡
 
-- [ ] **2.1** Database Helper Functions (connect, query, insert)
-- [ ] **2.2** Price Calculation Logic (Motor + Paint + Wheels + Extras)
+- [x] **2.1** Database Helper Functions (connect, query, insert)
+- [x] **2.2** Price Calculation Logic (Motor + Paint + Wheels + Extras)
 - [ ] **2.3** Configuration Save/Load (UUID generation, JSON handling)
 - [ ] **2.4** Frontend HTML Structure (Dropdown menus, price display)
 

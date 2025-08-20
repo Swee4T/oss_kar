@@ -1,0 +1,59 @@
+body { 
+    font-family: Arial, sans-serif; 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 20px;
+    background: #f5f5f5;
+}
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+.config-section { 
+    background: white;
+    margin: 20px 0; 
+    padding: 20px; 
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.title_car_options {
+    color: #333;
+    margin-top: 0;
+}
+select { 
+    width: 100%; 
+    padding: 12px; 
+    margin: 8px 0;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.price-display { 
+    background: linear-gradient(135deg, #9322a0 0%, #f5576c 100%);
+    color: white;
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    margin: 30px 0;
+}
+.price-display h2 {
+    margin: 0;
+    font-size: 2.5em;
+}
+input[type="radio"], input[type="checkbox"] {
+    margin-right: 10px;
+}
+label {
+    margin-right: 20px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+.loading {
+    text-align: center;
+    color: #666;
+    display: none;
+}

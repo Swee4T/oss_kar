@@ -23,7 +23,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
 });
 
 // Test Route
-app.get('/api/test', (req, resp) => {
+app.get('/api/test', (resp) => {
     resp.json({
         message: 'OSS_KAR backend is alive!',
         timestamp: new Date().toISOString()
