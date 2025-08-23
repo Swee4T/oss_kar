@@ -23,7 +23,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
 });
 
 // Test Route
-app.get('/api/test', (resp) => {
+app.get('/api/test', (req, resp) => {
     resp.json({
         message: 'OSS_KAR backend is alive!',
         timestamp: new Date().toISOString()
@@ -81,6 +81,24 @@ app.post('/api/calculate', (req, resp) => {
         });
     });
 });
+
+app.post('/api/generate', (req, resp) => {
+    const {engineId, paintId, wheelsId, extrasIds = [] } = req.body;
+
+    const params = new URLSearchParams();
+    if (engineId) params.set('engine', engineId);
+    if (paintId) params.set('color', paintId);
+    if (wheelsId) params.set('wheels', wheelsId);
+    if (extrasIds.length > 0) params.set('extras', extrasIds.join('-'));
+
+    const configUrl = `/config?${params.toString()}`;
+    
+    resp.json({
+        success: true,
+        configUrl: configUrl,
+        fullUrl: `http://localhost:3001${configUrl}`
+    });
+})
 
 // Start server
 app.listen(PORT, () => {

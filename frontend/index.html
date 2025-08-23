@@ -46,9 +46,20 @@
     <div class="price-display">
         <h2 id="total-price">25.000 €</h2>
         <p>Gesamtpreis inkl. aller Optionen</p>
+
+        <button class="button" id="generateConfigButton">
+            Teile deine Konfiguration
+        </button>
+        <div class="result_config_url">
+
+        </div>
+
     </div>
 
+
     <script>
+        // api route: /api/
+        // https://oskarpokorski.de/osskar/api/
         let carOptions = {};
 
         $(document).ready(function() {
@@ -56,11 +67,10 @@
             loadCarOptions();
         });
 
-        // Load options from backend
         function loadCarOptions() {
             $('#loading').show();
             
-            $.get('/osskar/api/options', function(carOptionsData) {
+            $.get('/api/options', function(carOptionsData) {
                 console.log('Options loaded:', carOptionsData);
                 carOptions = carOptionsData;
                 
@@ -75,13 +85,12 @@
                 $('#loading').hide();
             })
             .fail(function() {
-                console.error('❌ Loading failed');
+                console.error('Loading failed');
                 $('#loading').hide();
                 alert('Fehler beim Laden der Optionen');
             });
         }
 
-        // Unsere universal build function - wie wir entwickelt haben
         function buildSelection(type, name, data) {
             if (type === 'dropdown') {
 
@@ -134,7 +143,6 @@
                 calculatePrice();
             });
 
-            // checkbox max 5
             $('input[name="extras"]').change(function() {
                 let selectedExtras = $('input[name="extras"]:checked');
                 
@@ -147,24 +155,43 @@
                 console.log('Extras changed:', selectedExtras.length, 'selected');
                 calculatePrice();
             });
+
+            $('#generateConfigButton').click(function() {
+            console.log('Generate button clicked!');
+            let configData = generateConfig();
+
+                $.ajax({
+                    url: '/api/generate',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(configData), 
+                    success: function(response) {
+                        console.log('Generated URL:', response.configUrl);
+                        $('.result_config_url').html(`
+                            <div style="margin-top: 15px; padding: 10px; background: #fffff; border-radius: 15px;">
+                                <strong>Dein Konfigurations-Link:</strong><br>
+                                <input type="text" value="${response.fullUrl}" readonly style="width: 70%; margin: 10px ; padding: 5px;">
+                                </div>
+                        `);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Generate failed:', error);
+                        alert('Fehler beim Generieren der URL');
+                    }
+                });
+            });
         }
 
-        // backend price calculation
-        function calculatePrice() {
+        function generateConfig() {
 
             let engineId = $('select[name="engine"]').val() || null;
             let paintId = $('input[name="paint"]:checked').val() || null;
             let wheelsId = $('select[name="wheels"]').val() || null;
             let extrasIds = [];
-            
             $('input[name="extras"]:checked').each(function() {
                 extrasIds.push(parseInt($(this).val()));
             });
 
-            if (!engineId && !paintId && !wheelsId && extrasIds.length === 0) {
-                $('#total-price').text('25.000 €');
-                return;
-            }
 
             let configData = {
                 engineId: engineId ? parseInt(engineId) : null,
@@ -172,11 +199,21 @@
                 wheelsId: wheelsId ? parseInt(wheelsId) : null,
                 extrasIds: extrasIds
             };
+            console.log(configData);
+            return configData;
+        }
 
-            console.log('Calculating price for:', configData);
+
+        function calculatePrice() {
+            let configData = generateConfig();
+            
+            if (!configData.engineId && !configData.paintId && !configData.wheelsId && configData.extrasIds.length === 0) {
+                $('#total-price').text('25.000 €');
+                return;
+            }
 
             $.ajax({
-                url: '/osskar/api/calculate',
+                url: '/api/calculate',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(configData),
@@ -190,6 +227,8 @@
                 }
             });
         }
+
+        
 
         function formatPrice(price) {
             return new Intl.NumberFormat('de-DE', {
