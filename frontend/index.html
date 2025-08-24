@@ -11,50 +11,56 @@
 
     
 <body>
-    <div class="loading" id="loading">
-        <p>Lade Optionen...</p>
-    </div>
+    <div class="main-container">
+        <div class="model-section">
+            <p>3d model hier</p>
+        </div>
+        <div class="config-section">
+            <div class="loading" id="loading">
+                <p>Lade Optionen...</p>
+            </div>
 
-    <div class="config-section select_engine">
-        <h3 class="title_car_options">Wähle deinen Motor</h3>
-        <select name="engine" id="engine-select">
-        </select>
-    </div>
+            <div class="config-section choose-box select_engine">
+                <h3 class="title_car_options">Wähle deinen Motor</h3>
+                <select name="engine" id="engine-select">
+                </select>
+            </div>
 
-    <div class="config-section select_color">
-        <h3 class="title_car_options">Farbe</h3>
-        <div id="paint-container">
+            <div class="config-section choose-box select_color">
+                <h3 class="title_car_options">Farbe</h3>
+                <div id="paint-container">
+                </div>
+            </div>
+
+            <div class="config-section choose-box select_wheels">
+                <h3 class="title_car_options">Felgen</h3>
+                <select name="wheels" id="wheels-select">
+                </select>
+            </div>
+
+            <div class="config-section choose-box select_extra_options">
+                <h3 class="title_car_options">Wähle bis zu 5 Extras</h3>
+                <div id="extras-container">
+                </div>
+            </div>
+
+            <div class="price-display">
+                <h2 id="total-price">25.000 €</h2>
+                <p>Gesamtpreis inkl. aller Optionen</p>
+
+                <button class="button" id="generateConfigButton">
+                    Teile deine Konfiguration
+                </button>
+                <button class="button" id="resetConfigButton">
+                    Konfiguration zurücksetzen
+                </button>
+
+                <div class="result_config_url">
+                </div>
+
+            </div>
         </div>
     </div>
-
-    <div class="config-section select_wheels">
-        <h3 class="title_car_options">Felgen</h3>
-        <select name="wheels" id="wheels-select">
-        </select>
-    </div>
-
-    <div class="config-section select_extra_options">
-        <h3 class="title_car_options">Wähle bis zu 5 Extras</h3>
-        <div id="extras-container">
-        </div>
-    </div>
-
-    <div class="price-display">
-        <h2 id="total-price">25.000 €</h2>
-        <p>Gesamtpreis inkl. aller Optionen</p>
-
-        <button class="button" id="generateConfigButton">
-            Teile deine Konfiguration
-        </button>
-        <button class="button" id="resetConfigButton">
-            Konfiguration zurücksetzen
-        </button>
-
-        <div class="result_config_url">
-        </div>
-
-    </div>
-
 </body>
 
 </html>
