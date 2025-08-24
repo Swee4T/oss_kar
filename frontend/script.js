@@ -11,7 +11,6 @@ let carOptions = {};
 $(document).ready(function() {
     console.log('OSS-KAR Frontend loaded!');
     loadCarOptions();
-    loadConfigFromURL();
 });
 
 function loadCarOptions() {
@@ -28,6 +27,7 @@ function loadCarOptions() {
         
 
         setupEventListeners();
+        loadConfigFromURL();
         
         $('#loading').hide();
     })
