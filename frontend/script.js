@@ -187,13 +187,13 @@ function loadConfigFromURL() {
         $('#engine-select').val(engineId)
     }
     if (paintId) {
-        $(`$input[name="paint"][value="${paintId}"]`).prop('checked', true);
+        $(`input[name="paint"][value="${paintId}"]`).prop('checked', true);
     }
     if (wheelsId) {
         $('#wheels-select').val(wheelsId);
     }
-    extraIds.forEach(extraIds => {
-        $(`input[name="extras"][value=${extraIds}]`).prop('checked', true);
+    extraIds.forEach(extraId => {
+        $(`input[name="extras"][value="${extraId}"]`).prop('checked', true);
     })
 }
 
