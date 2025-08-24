@@ -58,8 +58,11 @@
 
 
     <script>
-        // api route: /api/
-        // https://oskarpokorski.de/osskar/api/
+        // online
+        const API_BASE = "/osskar/api"
+        // local
+        // const API_BASE = "/api"
+
         let carOptions = {};
 
         $(document).ready(function() {
@@ -70,7 +73,7 @@
         function loadCarOptions() {
             $('#loading').show();
             
-            $.get('/api/options', function(carOptionsData) {
+            $.get(`${API_BASE}/options`, function(carOptionsData) {
                 console.log('Options loaded:', carOptionsData);
                 carOptions = carOptionsData;
                 
@@ -161,7 +164,7 @@
             let configData = generateConfig();
 
                 $.ajax({
-                    url: '/api/generate',
+                    url: `${API_BASE}/generate`,
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(configData), 
@@ -213,7 +216,7 @@
             }
 
             $.ajax({
-                url: '/api/calculate',
+                url: `${API_BASE}/calculate`,
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(configData),
