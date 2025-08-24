@@ -28,6 +28,7 @@ function loadCarOptions() {
 
         setupEventListeners();
         loadConfigFromURL();
+        calculatePrice();
         
         $('#loading').hide();
     })
@@ -104,9 +105,7 @@ function setupEventListeners() {
     });
 
     $('#generateConfigButton').click(function() {
-
-    let configData = generateConfig();
-
+        let configData = generateConfig();
         $.ajax({
             url: `${API_BASE}/generate`,
             method: 'POST',
@@ -127,6 +126,19 @@ function setupEventListeners() {
             }
         });
     });
+
+    $('#resetConfigButton').click(function() {
+        $('#engine-select').val('');
+        $('#wheels-select').val('');
+        
+        $('input[name="paint"]').prop('checked', false);
+        $('input[name="extras"]').prop('checked', false);
+        
+        $('.result_config_url').html('');
+
+        calculatePrice();
+    });
+
 }
 
 function generateConfig() {
