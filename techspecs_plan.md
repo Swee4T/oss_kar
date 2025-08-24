@@ -156,15 +156,14 @@ CREATE TABLE orders (
 
 - [x] **2.1** Database Helper Functions (connect, query, insert)
 - [x] **2.2** Price Calculation Logic (Motor + Paint + Wheels + Extras)
-- [ ] **2.3** Configuration Save/Load (UUID generation, JSON handling)
-- [x] **2.4** Frontend HTML Structure (Dropdown menus, price display)
+- [x] **2.3** Frontend HTML Structure (Dropdown menus, price display)
 
 ### **Level 3: Real-time Magic** 🚀
 
 - [x] **3.1** jQuery Event Handlers (onChange → API call → price update)
 - [x] **3.2** AJAX Communication (Frontend ↔ Backend ohne page reload)
 - [x] **3.3** URL Generation & Sharing (config ID → shareable link)
-- [ ] **3.4** Configuration Loading via URL (load saved config from link)
+- [x] **3.4** Configuration Loading via URL (load saved config from link)
 
 ### **Level 4: Order System** 📦
 
