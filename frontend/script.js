@@ -1,5 +1,6 @@
 // select api path depending on host
 // api for local development
+
 // osskar/api for remote use
 const API_BASE = window.location.hostname === 'localhost' 
     ? '/api' 
@@ -10,6 +11,7 @@ let carOptions = {};
 $(document).ready(function() {
     console.log('OSS-KAR Frontend loaded!');
     loadCarOptions();
+    loadConfigFromURL();
 });
 
 function loadCarOptions() {
@@ -137,14 +139,12 @@ function generateConfig() {
         extrasIds.push(parseInt($(this).val()));
     });
 
-
     let configData = {
         engineId: engineId ? parseInt(engineId) : null,
         paintId: paintId ? parseInt(paintId) : null,
         wheelsId: wheelsId ? parseInt(wheelsId) : null,
         extrasIds: extrasIds
     };
-    console.log(configData);
     return configData;
 }
 
@@ -173,7 +173,29 @@ function calculatePrice() {
     });
 }
 
+function loadConfigFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
 
+    const engineId = urlParams.get('engine');
+    const paintId = urlParams.get('color');
+    const wheelsId = urlParams.get('wheels')
+
+    const extras_String = urlParams.get('extras')
+    const extraIds = extras_String ? extras_String.split('-').map(id => parseInt(id)): [];
+
+    if (engineId) {
+        $('#engine-select').val(engineId)
+    }
+    if (paintId) {
+        $(`$input[name="paint"][value="${paindId}"]`).prop('checked', true);
+    }
+    if (wheelsId) {
+        $('#wheels-select').val(wheelsId);
+    }
+    extraIds.forEach(extraId => {
+        $(`input[name="extras][value=${extraId}]`).prop('checked', true);
+    })
+}
 
 function formatPrice(price) {
     return new Intl.NumberFormat('de-DE', {

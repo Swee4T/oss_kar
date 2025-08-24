@@ -76,7 +76,7 @@ app.post('/api/calculate', (req, resp) => {
         });
         
         resp.json({
-            totalPrice: totalPrice.toFixed(2),
+            totalPrice: totalPrice,
             breakdown
         });
     });
@@ -96,7 +96,7 @@ app.post('/api/generate', (req, resp) => {
     resp.json({
         success: true,
         configUrl: configUrl,
-        fullUrl: `http://localhost:3001${configUrl}`
+        fullUrl: `https://oskarpokorski.de/osskar${configUrl}`
     });
 })
 
