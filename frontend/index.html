@@ -58,10 +58,12 @@
 
 
     <script>
-        // online
-        const API_BASE = "/osskar/api"
-        // local
-        // const API_BASE = "/api"
+        // select api path depending on host
+        // api for local development
+        // osskar/api for remote use
+        const API_BASE = window.location.hostname === 'localhost' 
+            ? '/api' 
+            : '/osskar/api';
 
         let carOptions = {};
 
