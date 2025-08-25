@@ -10,6 +10,18 @@ const PORT = 3001;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// DISABLE CACHE FOR DEVELOPMENT
+app.use((req, res, next) => {
+    res.set({
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        'Surrogate-Control': 'no-store'
+    });
+    next();
+});
+
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Database connection
