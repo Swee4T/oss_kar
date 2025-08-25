@@ -8,7 +8,15 @@ const app = express();
 const PORT = 3001;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:3001',           // Development
+        'https://oskarpokorski.de',        // Production  
+    ],
+    credentials: true,
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // DISABLE CACHE FOR DEVELOPMENT
