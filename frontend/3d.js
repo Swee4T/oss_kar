@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    console.log('Initializing Premium Car Viewer...');
+    console.log('Initializing Car Viewer...');
     initWorldClassViewer();
 });
 
@@ -13,7 +13,6 @@ function initWorldClassViewer() {
     const width = container.offsetWidth;
     const height = container.offsetHeight;
     
-    // SCENE - Professional Studio Setup
     const scene = new THREE.Scene();
     
     // CAMERA - Auto Focus Perspective
@@ -35,7 +34,7 @@ function initWorldClassViewer() {
     renderer.toneMappingExposure = 1.0;
     container.appendChild(renderer.domElement);
     
-    // LIGHTING - Studio Perfect
+    
     // Ambient light for general illumination
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
@@ -120,19 +119,36 @@ function initWorldClassViewer() {
             // Slight rotation for presentation
             car.rotation.y = Math.PI * 0.1;
             
-            // ENHANCE MATERIALS
+            // ENHANCE MATERIALS & FIND ALL BODY PARTS
+            let bodyMaterials = [];
             car.traverse((child) => {
                 if (child.isMesh) {
                     child.castShadow = true;
                     child.receiveShadow = true;
                     
                     if (child.material) {
+                        // Log ALL materials for debugging
+                        console.log('🔍 Material found:', child.material.name, 'Type:', child.material.type);
+                        
+                        // Find ALL car paint materials
+                        const materialName = child.material.name ? child.material.name.toLowerCase() : '';
+                        if (materialName.includes('body') || 
+                            materialName.includes('paint') || 
+                            materialName.includes('metallic')) {
+                            bodyMaterials.push(child.material);
+                            console.log('🎨 Found paint material:', child.material.name);
+                        }
+                        
                         // Enhance material properties
                         child.material.envMapIntensity = 1.0;
                         child.material.needsUpdate = true;
                     }
                 }
             });
+            
+            // STORE CAR REFERENCE FOR COLOR CHANGES
+            window.carModel = car;
+            window.carBodyMaterials = bodyMaterials;
             
             // STUDIO FLOOR
             const floorGeometry = new THREE.PlaneGeometry(20, 20);
@@ -193,4 +209,47 @@ function initWorldClassViewer() {
     }
     
     window.addEventListener('resize', handleResize);
+}
+
+// 🎨 FUNCTION: CHANGE CAR COLOR
+function changeCarColor(colorHex) {
+    if (!window.carModel) {
+        console.warn('Car model not loaded yet');
+        return;
+    }
+    
+    console.log('🎨 Changing car color to:', colorHex);
+    
+    // Convert hex to THREE.Color
+    const color = new THREE.Color(colorHex);
+    
+    // Method 1: Change ALL body materials
+    if (window.carBodyMaterials && window.carBodyMaterials.length > 0) {
+        console.log('🎨 Changing', window.carBodyMaterials.length, 'body materials...');
+        window.carBodyMaterials.forEach((material, index) => {
+            console.log(`🎨 Material ${index}:`, material.name, 'Before:', material.color);
+            material.color = color;
+            material.needsUpdate = true;
+            console.log(`🎨 Material ${index} After:`, material.color);
+        });
+        return;
+    }
+    
+    // Method 2: Find body material by searching all materials
+    window.carModel.traverse((child) => {
+        if (child.isMesh && child.material) {
+            const materialName = child.material.name ? child.material.name.toLowerCase() : '';
+            
+            // Look for body, paint, or main color materials
+            if (materialName.includes('body') || 
+                materialName.includes('paint') || 
+                materialName.includes('color') ||
+                materialName.includes('exterior')) {
+                
+                child.material.color = color;
+                child.material.needsUpdate = true;
+                console.log('🎨 Updated material:', child.material.name);
+            }
+        }
+    });
 }

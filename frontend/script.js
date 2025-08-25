@@ -82,7 +82,29 @@ function setupEventListeners() {
     });
 
     $('input[name="paint"]').change(function() {
-        console.log('Paint changed:', $(this).val());
+        const paintId = $(this).val();
+        console.log('Paint changed:', paintId);
+        
+        // LIVE COLOR CHANGE
+        if (paintId && typeof changeCarColor === 'function') {
+            const selectedPaint = carOptions.paint.find(p => p.id == paintId);
+            if (selectedPaint) {
+                // Map paint names to hex colors
+                const colorMap = {
+                    'Black': '#2d2d2d',              // Dunkles Grau statt Schwarz
+                    'Matrix Green': '#1b5e20',       // Sattes dunkles Grün
+                    'Night City Purple': '#2e0854',  // NOCH dunkler - richtig cool!
+                    'Arctic White': '#ffffff',
+                    'Gunmetal Grey': '#4a5568'
+                };
+                
+                const hexColor = colorMap[selectedPaint.name];
+                if (hexColor !== null) {
+                    changeCarColor(hexColor);
+                }
+            }
+        }
+        
         calculatePrice();
     });
 
