@@ -1,29 +1,26 @@
-// 🏆 WORLD-CLASS 3D CAR VIEWER 2025 
-// Inspired by Tesla, Porsche, BMW configurators
-
 $(document).ready(function() {
-    console.log('🚗 Initializing Premium Car Viewer...');
+    console.log('Initializing Premium Car Viewer...');
     initWorldClassViewer();
 });
 
 function initWorldClassViewer() {
     const container = document.getElementById('threejs-container');
     if (!container) {
-        console.error('❌ Container not found');
+        console.error('Container not found');
         return;
     }
     
     const width = container.offsetWidth;
     const height = container.offsetHeight;
     
-    // 🎬 SCENE - Professional Studio Setup
+    // SCENE - Professional Studio Setup
     const scene = new THREE.Scene();
     
-    // 📷 CAMERA - Auto Focus Perspective
+    // CAMERA - Auto Focus Perspective
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.set(4, 2, 6); // ✅ NÄHER dran!
+    camera.position.set(4, 2, 6);
     
-    // 🎨 RENDERER - Ultra Quality
+    // RENDERER - Ultra Quality
     const renderer = new THREE.WebGLRenderer({ 
         antialias: true,
         alpha: false,
@@ -38,7 +35,7 @@ function initWorldClassViewer() {
     renderer.toneMappingExposure = 1.0;
     container.appendChild(renderer.domElement);
     
-    // 🌟 LIGHTING - Studio Perfect
+    // LIGHTING - Studio Perfect
     // Ambient light for general illumination
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
@@ -66,7 +63,7 @@ function initWorldClassViewer() {
     rimLight.position.set(0, 5, -10);
     scene.add(rimLight);
     
-    // 🏞️ ENVIRONMENT - Premium Studio
+    // ENVIRONMENT - Premium Studio
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     pmremGenerator.compileEquirectangularShader();
     
@@ -77,7 +74,7 @@ function initWorldClassViewer() {
     // Background gradient
     scene.background = new THREE.Color(0xf5f5f5);
     
-    // 🎮 CONTROLS - Smooth Interaction
+    // CONTROLS - Smooth Interaction
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
@@ -87,7 +84,7 @@ function initWorldClassViewer() {
     controls.enablePan = false;
     controls.autoRotate = false;
     
-    // 🚗 LOAD CAR MODEL
+    // LOAD CAR MODEL
     const loader = new THREE.GLTFLoader();
     
     // Show loading
@@ -98,11 +95,11 @@ function initWorldClassViewer() {
     
     loader.load('1998_audi_tt_8n_lpmp/scene.gltf', 
         function(gltf) {
-            console.log('✅ Car model loaded successfully');
+            console.log('Car model loaded successfully');
             
             const car = gltf.scene;
             
-            // 📏 AUTO-SCALE & CENTER
+            // AUTO-SCALE & CENTER
             const box = new THREE.Box3().setFromObject(car);
             const center = box.getCenter(new THREE.Vector3());
             const size = box.getSize(new THREE.Vector3());
@@ -123,7 +120,7 @@ function initWorldClassViewer() {
             // Slight rotation for presentation
             car.rotation.y = Math.PI * 0.1;
             
-            // 🎨 ENHANCE MATERIALS
+            // ENHANCE MATERIALS
             car.traverse((child) => {
                 if (child.isMesh) {
                     child.castShadow = true;
@@ -137,7 +134,7 @@ function initWorldClassViewer() {
                 }
             });
             
-            // 🏁 STUDIO FLOOR
+            // STUDIO FLOOR
             const floorGeometry = new THREE.PlaneGeometry(20, 20);
             const floorMaterial = new THREE.MeshStandardMaterial({
                 color: 0xffffff,
@@ -153,7 +150,7 @@ function initWorldClassViewer() {
             
             scene.add(car);
             
-            // 🎯 FOCUS CAMERA ON CAR
+            // FOCUS CAMERA ON CAR
             controls.target.copy(car.position);
             controls.update();
             
@@ -162,7 +159,7 @@ function initWorldClassViewer() {
                 loadingElement.style.display = 'none';
             }
             
-            console.log('🏆 Premium car viewer ready!');
+            console.log(' car viewer ready!');
         },
         
         function(progress) {
@@ -170,14 +167,14 @@ function initWorldClassViewer() {
         },
         
         function(error) {
-            console.error('❌ Error loading car model:', error);
+            console.error('Error loading car model:', error);
             if (loadingElement) {
-                loadingElement.innerHTML = '<p>❌ Error loading 3D model</p>';
+                loadingElement.innerHTML = '<p>Error loading 3D model</p>';
             }
         }
     );
     
-    // 🎬 RENDER LOOP
+    // RENDER LOOP
     function animate() {
         requestAnimationFrame(animate);
         controls.update();
@@ -185,7 +182,7 @@ function initWorldClassViewer() {
     }
     animate();
     
-    // 📱 RESPONSIVE RESIZE
+    // RESPONSIVE RESIZE
     function handleResize() {
         const newWidth = container.offsetWidth;
         const newHeight = container.offsetHeight;
