@@ -1,0 +1,8 @@
+Model Information:
+* title:	1998 Audi TT (8N, LP/MP)
+* source:	https://sketchfab.com/3d-models/1998-audi-tt-8n-lpmp-00485115ec44468b82cec1b587160a5f
+* author:	KrStolorz (Krzysztof Stolorz) (https://sketchfab.com/KrStolorz)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

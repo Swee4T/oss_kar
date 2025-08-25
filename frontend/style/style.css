@@ -1,96 +1,315 @@
-body { 
-    font-family: Arial, sans-serif; 
-    max-width: 1080px; 
-    margin: 0 auto; 
-    padding: 20px;
-    background: #f5f5f5;
-}
-.header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 30px;
-    text-align: center;
-    border-radius: 10px;
-    margin-bottom: 30px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.main-container {
-    position: relative;
-    width: 1280px;
-    height: 1080px; 
-    margin: 0 auto;
-}
-
-.model-section {
-    width: 100%;
-    height: 100%;
-    background: #dcdcdc;
-}
-
-.config-section {
-    position: absolute;
-    top: 10px;
-    right: 80px;
-    width: 330px;
-    background: rgba(255,255,255,0.5);
-    border-radius: 15px;
-    padding: 20px;
-    overflow-y: auto;
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: #000;
+    color: #fff;
     overflow-x: hidden;
 }
 
+.main-container {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 75vh 25vh;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+}
+
+.model-section {
+    position: relative;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 1px solid #333;
+    overflow: hidden;
+}
+
+#threejs-container {
+    width: 100%;
+    height: 100%;
+}
+
+.config-section {
+    background: #000;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    border-top: 1px solid #333;
+    backdrop-filter: blur(20px);
+    overflow-y: auto;
+}
+
+.config-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+/* OPTION CARDS */
 .choose-box {
-    margin-top: 1em;
-    background: linear-gradient(180deg, #ebeeff 30%, #e6e6e6 90%);
-    padding: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    
-    position: static;
+    padding: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.choose-box:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
 }
 
 .title_car_options {
-    color: #333;
-    margin-top: 0;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #fff;
+    letter-spacing: -0.02em;
 }
 
-select { 
-    width: 90%; 
-    padding: 5px; 
-    margin: 5px ;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
+select {
+    width: 100%;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
-.price-display { 
-    background: linear-gradient(135deg, #9322a0 0%, #f5576c 100%);
-    color: white;
-    text-align: center;
-    padding: 25px;
-    border-radius: 10px;
-    margin: 30px 0;
+
+select:focus {
+    outline: none;
+    border-color: #007AFF;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
 }
-.price-display h2 {
-    margin: 0;
-    font-size: 2.5em;
+
+select option {
+    background: #1a1a1a;
+    color: #fff;
 }
+
+/* RADIO & CHECKBOX - Compact Design */
 input[type="radio"], input[type="checkbox"] {
-    margin-right: 10px;
-}
-label {
-    margin-right: 20px;
-    margin-bottom: 10px;
-    display: inline-block;
-}
-.loading {
-    text-align: center;
-    color: #666;
-    display: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    margin-right: 8px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
-.button {
-    text-align: center;
-    margin: 1em;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
+input[type="checkbox"] {
+    border-radius: 6px;
 }
+
+input[type="radio"]:checked, input[type="checkbox"]:checked {
+    border-color: #007AFF;
+    background: #007AFF;
+}
+
+input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+/* LABELS - Horizontal Layout */
+label {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 4px;
+    margin-right: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+}
+
+label:hover {
+    color: #fff;
+}
+
+/* 💰 PRICE DISPLAY - Right Side Compact */
+.price-display {
+    background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    height: fit-content;
+    box-shadow: 0 15px 30px rgba(0, 122, 255, 0.3);
+}
+
+.price-display h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+}
+
+.price-display p {
+    font-size: 13px;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+/* BUTTONS - Compact Actions */
+.button {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 4px;
+    backdrop-filter: blur(10px);
+    display: block;
+    width: 100%;
+}
+
+.button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.button:active {
+    transform: translateY(0);
+}
+
+/* LOADING STATE */
+.loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 24px 40px;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 500;
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+}
+
+/* CONFIG URL RESULT */
+.result_config_url {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.result_config_url input {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #fff;
+    font-family: monospace;
+    font-size: 14px;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .main-container {
+        grid-template-rows: 60vh 40vh;
+    }
+    
+    .config-section {
+        grid-template-columns: 1fr;
+        padding: 15px;
+        gap: 20px;
+    }
+    
+    .config-options {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    
+    .price-display {
+        padding: 20px;
+        margin-top: 0;
+    }
+    
+    .price-display h2 {
+        font-size: 36px;
+    }
+    
+    .button {
+        padding: 12px 20px;
+        font-size: 14px;
+        margin: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .config-section {
+        padding: 16px;
+    }
+    
+    .choose-box {
+        padding: 20px;
+    }
+    
+    .price-display h2 {
+        font-size: 28px;
+    }
+}
+
+/* PREMIUM ANIMATIONS */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.choose-box {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.choose-box:nth-child(2) { animation-delay: 0.1s; }
+.choose-box:nth-child(3) { animation-delay: 0.2s; }
+.choose-box:nth-child(4) { animation-delay: 0.3s; }
+.choose-box:nth-child(5) { animation-delay: 0.4s; }

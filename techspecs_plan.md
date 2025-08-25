@@ -241,8 +241,11 @@ car-configurator/
 - ✅ Alle Optionen konfigurierbar
 
 ### Stretch Goals
-- three.js model car
-  - live changing color
+- ✅ **Three.js 3D Car Viewer** - ULTRA Quality
+  - Professional 3D viewer with Orbit Controls
+  - 4K Shadow Resolution & Environment Maps
+  - Real-time reflections & advanced lighting
+- [ ] Live changing color integration
 - different frontends: jquery vs vue vs react
 - add chatbot
   - adjusts options

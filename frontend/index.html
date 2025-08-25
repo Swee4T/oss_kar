@@ -7,43 +7,51 @@
     <link rel="stylesheet" href="style/style.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="script.js"></script>
+    <script src="3d.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 
     
 <body>
     <div class="main-container">
         <div class="model-section">
-            <p>3d model hier</p>
+            <div id="threejs-container"></div>
         </div>
         <div class="config-section">
             <div class="loading" id="loading">
                 <p>Lade Optionen...</p>
             </div>
 
-            <div class="config-section choose-box select_engine">
-                <h3 class="title_car_options">Wähle deinen Motor</h3>
-                <select name="engine" id="engine-select">
-                </select>
-            </div>
+            <!-- 📋 LEFT SIDE: Configuration Options -->
+            <div class="config-options">
+                <div class="choose-box select_engine">
+                    <h3 class="title_car_options">Wähle deinen Motor</h3>
+                    <select name="engine" id="engine-select">
+                    </select>
+                </div>
 
-            <div class="config-section choose-box select_color">
-                <h3 class="title_car_options">Farbe</h3>
-                <div id="paint-container">
+                <div class="choose-box select_color">
+                    <h3 class="title_car_options">Farbe</h3>
+                    <div id="paint-container">
+                    </div>
+                </div>
+
+                <div class="choose-box select_wheels">
+                    <h3 class="title_car_options">Felgen</h3>
+                    <select name="wheels" id="wheels-select">
+                    </select>
+                </div>
+
+                <div class="choose-box select_extra_options">
+                    <h3 class="title_car_options">Wähle bis zu 5 Extras</h3>
+                    <div id="extras-container">
+                    </div>
                 </div>
             </div>
 
-            <div class="config-section choose-box select_wheels">
-                <h3 class="title_car_options">Felgen</h3>
-                <select name="wheels" id="wheels-select">
-                </select>
-            </div>
-
-            <div class="config-section choose-box select_extra_options">
-                <h3 class="title_car_options">Wähle bis zu 5 Extras</h3>
-                <div id="extras-container">
-                </div>
-            </div>
-
+            <!-- 💰 RIGHT SIDE: Price & Actions -->
             <div class="price-display">
                 <h2 id="total-price">25.000 €</h2>
                 <p>Gesamtpreis inkl. aller Optionen</p>
@@ -57,7 +65,6 @@
 
                 <div class="result_config_url">
                 </div>
-
             </div>
         </div>
     </div>
