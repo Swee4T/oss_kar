@@ -42,13 +42,15 @@ body {
 }
 
 .config-options {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
 }
 
 /* OPTION CARDS */
 .choose-box {
+    flex: 1;
+    min-width: 180px;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -249,18 +251,23 @@ label:hover {
 /* RESPONSIVE DESIGN */
 @media (max-width: 768px) {
     .main-container {
-        grid-template-rows: 60vh 40vh;
+        grid-template-rows: 65vh 35vh;
     }
     
     .config-section {
         grid-template-columns: 1fr;
         padding: 15px;
         gap: 20px;
+        overflow-y: scroll;
     }
     
     .config-options {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .choose-box {
+        min-width: unset;
     }
     
     .price-display {
