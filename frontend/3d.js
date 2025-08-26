@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    console.log('Initializing Car Viewer...');
+    //console.log('Initializing Car Viewer...');
     initWorldClassViewer();
 });
 
@@ -94,7 +94,7 @@ function initWorldClassViewer() {
     
     loader.load('1998_audi_tt_8n_lpmp/scene.gltf', 
         function(gltf) {
-            console.log('Car model loaded successfully');
+            //console.log('Car model loaded successfully');
             
             const car = gltf.scene;
             
@@ -128,7 +128,7 @@ function initWorldClassViewer() {
                     
                     if (child.material) {
                         // Log ALL materials for debugging
-                        console.log('🔍 Material found:', child.material.name, 'Type:', child.material.type);
+                        //console.log('🔍 Material found:', child.material.name, 'Type:', child.material.type);
                         
                         // Find ALL car paint materials
                         const materialName = child.material.name ? child.material.name.toLowerCase() : '';
@@ -136,7 +136,7 @@ function initWorldClassViewer() {
                             materialName.includes('paint') || 
                             materialName.includes('metallic')) {
                             bodyMaterials.push(child.material);
-                            console.log('🎨 Found paint material:', child.material.name);
+                            //console.log('🎨 Found paint material:', child.material.name);
                         }
                         
                         // Enhance material properties
@@ -175,11 +175,11 @@ function initWorldClassViewer() {
                 loadingElement.style.display = 'none';
             }
             
-            console.log(' car viewer ready!');
+            //console.log(' car viewer ready!');
         },
         
         function(progress) {
-            console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
+            //console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
         },
         
         function(error) {
@@ -218,19 +218,19 @@ function changeCarColor(colorHex) {
         return;
     }
     
-    console.log('🎨 Changing car color to:', colorHex);
+    //console.log('🎨 Changing car color to:', colorHex);
     
     // Convert hex to THREE.Color
     const color = new THREE.Color(colorHex);
     
     // Method 1: Change ALL body materials
     if (window.carBodyMaterials && window.carBodyMaterials.length > 0) {
-        console.log('🎨 Changing', window.carBodyMaterials.length, 'body materials...');
+        //console.log('🎨 Changing', window.carBodyMaterials.length, 'body materials...');
         window.carBodyMaterials.forEach((material, index) => {
-            console.log(`🎨 Material ${index}:`, material.name, 'Before:', material.color);
+            //console.log(`🎨 Material ${index}:`, material.name, 'Before:', material.color);
             material.color = color;
             material.needsUpdate = true;
-            console.log(`🎨 Material ${index} After:`, material.color);
+            //console.log(`🎨 Material ${index} After:`, material.color);
         });
         return;
     }
@@ -248,7 +248,7 @@ function changeCarColor(colorHex) {
                 
                 child.material.color = color;
                 child.material.needsUpdate = true;
-                console.log('🎨 Updated material:', child.material.name);
+                //console.log('🎨 Updated material:', child.material.name);
             }
         }
     });

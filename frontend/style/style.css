@@ -16,13 +16,40 @@ body {
     display: grid;
     grid-template-rows: 65vh 35vh;
     background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    overflow: hidden;
 }
 
 .model-section {
     position: relative;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-bottom: 1px solid #333;
-    overflow: hidden;
+    z-index: 1;
+}
+
+.config-section {
+    /* Kann scrollen/verschwinden */
+    position: relative;
+    transition: transform 0.8s ease;
+    z-index: 2;
+}
+
+.config-section.scroll-up {
+    /* Scrollt nach oben raus */
+    transform: translateY(-100%);
+}
+
+.order-section {
+    /* Kommt von unten rein */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 35vh; /* Gleiche Höhe wie config-section */
+    
+    transform: translateY(100%); /* Versteckt unten */
+    transition: transform 0.8s ease;
+}
+
+.order-section.show {
+    transform: translateY(0); /* Slide rein */
 }
 
 #threejs-container {
@@ -332,3 +359,62 @@ label:hover {
 .choose-box:nth-child(3) { animation-delay: 0.2s; }
 .choose-box:nth-child(4) { animation-delay: 0.3s; }
 .choose-box:nth-child(5) { animation-delay: 0.4s; }
+
+.order-section {
+    height: 35vh; 
+    width: 100%;
+    background: #000;
+    padding: 40px;
+    
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.order-step {
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    
+    /* Glass morphism style */
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.order-step h2 {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.order-step p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 30px;
+}
+
+.order-step input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+}
+
+.order-step input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.order-step input:focus {
+    outline: none;
+    border-color: #4a9eff;
+    box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
+}

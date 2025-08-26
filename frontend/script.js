@@ -89,7 +89,6 @@ function setupEventListeners() {
         if (paintId && typeof changeCarColor === 'function') {
             const selectedPaint = carOptions.paint.find(p => p.id == paintId);
             if (selectedPaint) {
-                // Map paint names to hex colors
                 const colorMap = {
                     'Black': '#2d2d2d',
                     'Matrix Green': '#1b5e20',
@@ -161,6 +160,63 @@ function setupEventListeners() {
         calculatePrice();
     });
 
+    $('#buyButton').click(function() {
+        //main-container wird nach oben gescrollt- unter dem config-container kommt scrollt ein neuer container hervor wo der nutzer
+        // als erstes sein email eingibt -> weiter
+        // nach email check -> daten eingeben / bzw bestätigen ->
+        // bestellung jetzt aufgeben :D 
+        
+        $('#order-section').show();
+        $('#step-email').show();
+        $('#step-customer').hide();
+        $('#step-confirm').hide();
+        
+
+        $('html, body').animate({
+            scrollTop: $('#order-section').offset().top
+        }, 800);
+    });
+
+}
+// Event Delegation für Order Flow
+$(document).on('click', '#confirm-email-button', function() {
+    console.log('Email button clicked!');
+    const email = $('#customer-email').val();
+    
+    if (!email || !email.includes('@')) {
+        alert('Bitte gib eine gültige Email-Adresse ein!');
+        return;
+    }
+    
+    showStep('customer');
+});
+
+$(document).on('click', '#confirm-customer-data-button', function() {
+    console.log('Customer button clicked!');
+    const firstName = $('#customer-first-name').val();
+    const lastName = $('#customer-last-name').val();
+    
+    if (!firstName || !lastName) {
+        alert('Bitte fülle alle Felder aus!');
+        return;
+    }
+    
+    showStep('confirm');
+    
+    const currentPrice = $('#total-price').text();
+    $('#final-price').text(currentPrice);
+});
+
+$(document).on('click', '#final-order-button', function() {
+    console.log('Final order button clicked!');
+    submitOrder();
+});
+
+// Helper Functions
+function showStep(stepName) {
+    console.log('Showing step:', stepName);
+    $('.order-step').hide();
+    $('#step-' + stepName).show();
 }
 
 function generateConfig() {
@@ -238,4 +294,17 @@ function formatPrice(price) {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
     }).format(price);
+}
+
+function submitOrder() {
+    const orderData = {
+        email: $('#customer-email').val(),
+        firstName: $('#customer-first-name').val(), 
+        lastName: $('#customer-last-name').val(),
+        configData: generateConfig()
+    };
+    
+    console.log('Submitting order:', orderData);
+    // TODO: API call
+    alert('Bestellung wird verarbeitet! (Demo)');
 }

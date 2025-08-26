@@ -66,9 +66,29 @@
                     Konfiguration zurücksetzen
                 </button>
 
-                <div class="result_config_url">
-                </div>
+                <div class="result_config_url"></div>
             </div>
+        </div>
+        <div class="order-section" id="order-section" style="display: none;">
+            <div class="order-step" id="step-email">
+                <h2>Deine Email-Adresse</h2>
+                <p>Gib als erstes deine Email Adresse ein:</p>
+                <input type="email" id="customer-email" placeholder="deine@email.com">
+                <button class="button" id="confirm-email-button">Weiter</button>
+            </div>
+            <div class="order-step" id="step-customer" style="display: none;">
+                <h2>Deine Daten:</h2>
+                <input type="text" id="customer-first-name" placeholder="Vorname">
+                <input type="text" id="customer-last-name" placeholder="Nachname">
+                <button class="button" id="confirm-customer-data-button">Weiter</button>
+            </div>
+            <div class="order-step" id="step-confirm" style="display: none;">
+                <h2>Bestellung bestätigen</h2>
+                <p>Fahrzeug Konfiguration:</p>
+                <p>Gesamtpreis: <span id="final-price"></span></p>
+                <button class="button buy" id="final-order-button"> Jetzt bestellen :)</button>
+            </div>
+            
         </div>
     </div>
 </body>
