@@ -72,36 +72,45 @@ app.get('/api/options', (req, resp) => {
     });
 });
 
-// Calculate price 
-app.post('/api/calculate', (req, resp) => {
-    const { engineId, paintId, wheelsId, extrasIds = [] } = req.body;
-    
-    const allIds = [engineId, paintId, wheelsId, ...extrasIds].filter(id => id);
-    const placeholders = allIds.map(() => '?').join(',');
-    const sql = `SELECT * FROM car_options WHERE id IN (${placeholders})`;
-    
-    db.all(sql, allIds, (err, rows) => {
-        if (err) {
-            resp.status(500).json({ error: err.message });
-            return;
-        }
+
+function calculatePrice(configData) {
+    return new Promise((resolve, reject) => {
+        const { engineId, paintId, wheelsId, extrasIds = [] } = configData;
         
-        const basePrice = 25000;
-        let totalPrice = basePrice;
-        const breakdown = { basePrice };
+        const allIds = [engineId, paintId, wheelsId, ...extrasIds].filter(id => id);
+        const placeholders = allIds.map(() => '?').join(',');
+        const sql = `SELECT * FROM car_options WHERE id IN (${placeholders})`;
         
-        rows.forEach(option => {
-            totalPrice = totalPrice + parseFloat(option.price);
-            breakdown[option.category] = parseFloat(option.price);
-        });
-        
-        resp.json({
-            totalPrice: totalPrice,
-            breakdown
+        db.all(sql, allIds, (err, rows) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            
+            const basePrice = 25000;
+            let totalPrice = basePrice;
+            const breakdown = { basePrice };
+            
+            rows.forEach(option => {
+                totalPrice += parseFloat(option.price);
+                breakdown[option.category] = parseFloat(option.price);
+            });
+            
+            resolve({ totalPrice, breakdown });
         });
     });
+}
+
+app.post('/api/calculate', async (req, resp) => {
+    try {
+        const result = await calculatePrice(req.body);
+        resp.json(result);
+    } catch (err) {
+        resp.status(500).json({ error: err.message });
+    }
 });
 
+// generate shareable url
 app.post('/api/generate', (req, resp) => {
     const {engineId, paintId, wheelsId, extrasIds = [] } = req.body;
 
@@ -119,6 +128,91 @@ app.post('/api/generate', (req, resp) => {
         fullUrl: `https://oskarpokorski.de/osskar${configUrl}`
     });
 })
+
+//check if customer exists and make order
+app.post('/api/order', async (req, resp) => {
+    try {
+        const { email, firstName, lastName, configData } = req.body;
+        
+        if (!email || !firstName || !lastName || !configData) {
+            resp.status(400).json({ error: 'Missing required fields' });
+            return;
+        }
+
+        const priceResult = await calculatePrice(configData);
+        const totalPrice = priceResult.totalPrice;
+        
+        // Customer check/create
+        const customer = await new Promise((resolve, reject) => {
+            db.get('SELECT id FROM customers WHERE email = ?', [email], (err, result) => {
+                if (err) reject(err);
+                else resolve(result);
+            });
+        });
+        
+        let customerId;
+        if (customer) {
+            // Customer exists
+            customerId = customer.id;
+        } else {
+            // Create new customer
+            customerId = await new Promise((resolve, reject) => {
+                const insertCustomer = `INSERT INTO customers (first_name, last_name, email) VALUES (?,?,?)`;
+                db.run(insertCustomer, [firstName, lastName, email], function(err) {
+                    if (err) reject(err);
+                    else resolve(this.lastID);
+                });
+            });
+        }
+        
+        // Create configuration
+        const configId = uuidv4();
+        const { engineId, paintId, wheelsId, extrasIds } = configData;
+
+        await new Promise((resolve, reject) => {
+            const insertConfigSql = `
+                INSERT INTO configurations (id, engine_id, paint_id, wheels_id, extras_ids)
+                VALUES (?, ?, ?, ?, ?)
+            `;
+            
+            db.run(insertConfigSql, [configId, engineId, paintId, wheelsId, JSON.stringify(extrasIds)], function(err) {
+                if (err) reject(err);
+                else resolve(configId);
+            });
+        });
+
+        // Create order
+        const orderId = await new Promise((resolve, reject) => {
+            const insertOrderSql = `
+                INSERT INTO orders (config_id, customer_id, total_price)
+                VALUES (?, ?, ?)
+            `;
+            
+            db.run(insertOrderSql, [configId, customerId, totalPrice], function(err) {
+                if (err) reject(err);
+                else resolve(this.lastID);
+            });
+        });
+
+        // Success response
+        resp.json({
+            success: true,
+            orderId: orderId,
+            configId: configId,
+            customerId: customerId,
+            totalPrice: totalPrice,
+            breakdown: priceResult.breakdown,
+            message: 'Order created successfully!'
+        });
+        
+    } catch (err) {
+        console.error('Order creation failed:', err);
+        resp.status(500).json({ 
+            error: 'Order creation failed', 
+            details: err.message 
+        });
+    }
+});
 
 // Start server
 app.listen(PORT, () => {
