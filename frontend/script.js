@@ -91,9 +91,9 @@ function setupEventListeners() {
             if (selectedPaint) {
                 // Map paint names to hex colors
                 const colorMap = {
-                    'Black': '#2d2d2d',              // Dunkles Grau statt Schwarz
-                    'Matrix Green': '#1b5e20',       // Sattes dunkles Grün
-                    'Night City Purple': '#2e0854',  // NOCH dunkler - richtig cool!
+                    'Black': '#2d2d2d',
+                    'Matrix Green': '#1b5e20',
+                    'Night City Purple': '#2e0854',
                     'Arctic White': '#ffffff',
                     'Gunmetal Grey': '#4a5568'
                 };
@@ -138,7 +138,7 @@ function setupEventListeners() {
                 $('.result_config_url').html(`
                     <div style="margin-top: 15px; padding: 10px; border-radius: 15px;">
                         <strong>Dein Konfigurations-Link:</strong><br>
-                        <input type="text" value="${response.fullUrl}" readonly style="width: 70%; margin: 10px ; padding: 5px; border-radius: 5px;">
+                        <input type="text" value="${response.fullUrl}" readonly style="width: 80%; margin: 10px ; padding: 5px; border-radius: 5px;">
                         </div>
                 `);
             },

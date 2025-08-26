@@ -117,23 +117,10 @@ CREATE TABLE customers (
 }
 ```
 
-#### **POST /api/config/save**
+#### **GET /api/generate
 
-- **Purpose:** Konfiguration speichern
-- **Request Body:** (wie calculate)
-- **Response:**
-
-```json
-{
-  "configId": "abc123def",
-  "shareUrl": "/config/abc123def"
-}
-```
-
-#### **GET /api/config/:configId**
-
-- **Purpose:** Gespeicherte Konfiguration laden
-- **Response:** Vollständige Config + Preise
+- **Purpose:** URL zum sharen erstellen
+- **Response:** Vollständige URL
 
 #### **POST /api/orders**
 
@@ -142,9 +129,9 @@ CREATE TABLE customers (
 
 ```json
 {
-  "configId": "abc123def",
-  "customerName": "Max Mustermann",
-  "customerEmail": "max@example.com"
+  "config_id": "abc123def",
+  "customer_id"
+  "total_price": "Max Mustermann",
 }
 ```
 
