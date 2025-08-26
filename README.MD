@@ -1,4 +1,4 @@
-# 🚗 OSS-KAR: Premium Car Configurator
+# OSS-KAR: Car Configurator
 
 > **Modern 3D Car Configurator** with Real-time Pricing, Interactive 3D Viewer and  Order Management System
 
