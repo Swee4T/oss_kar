@@ -36,8 +36,6 @@ CREATE TABLE configurations (
     paint_id INTEGER,
     wheels_id INTEGER,
     extras_ids TEXT,                  -- JSON Array: "[1,3,7]"
-    total_price DECIMAL(10,2),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (engine_id) REFERENCES car_options(id),
     FOREIGN KEY (paint_id) REFERENCES car_options(id),
     FOREIGN KEY (wheels_id) REFERENCES car_options(id)
@@ -49,15 +47,24 @@ CREATE TABLE configurations (
 ```sql
 CREATE TABLE orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    config_id TEXT,
-    customer_name TEXT,
-    customer_email TEXT,
+    config_id TEXT NOT NULL,
+    customer_id INTEGER NOT NULL,
+    total_price DECIMAL(10,2),
     order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     status TEXT DEFAULT 'pending',
-    FOREIGN KEY (config_id) REFERENCES configurations(id)
+    FOREIGN KEY (config_id) REFERENCES configurations(id),
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
 );
 ```
 
+```sql
+CREATE TABLE customers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+);
+```
 -----
 
 ## 🔗 API Specifications
