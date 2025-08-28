@@ -48,7 +48,7 @@ function buildSelection(type, name, data) {
 
         data.forEach(item => {
             $(`#${name}-select`).append(
-                `<option value="${item.id}">${item.name} - ${item.price}€</option>`
+                `<option value="${item.id}">${item.name}<br>${item.price}€</option>`
             );
         });
     } 
