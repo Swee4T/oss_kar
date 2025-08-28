@@ -68,7 +68,7 @@ function buildSelection(type, name, data) {
         data.forEach(item => {
             $(`#${name}-container`).append(`
                 <input type="checkbox" id="${name}-${item.id}" name="${name}" value="${item.id}">
-                <label for="${name}-${item.id}">${item.name} - ${item.price}€</label><br>
+                <label for="${name}-${item.id}">${item.name}<br>${item.price}€</label><br>
             `);
         });
     }
